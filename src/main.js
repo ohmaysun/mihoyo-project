@@ -7,7 +7,13 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import store from './store/index'
 
+import axios from 'axios' // 引入axios
+import './mock/mock' // 引入mockjs
+
 Vue.use(ElementUI)
+
+// axios不能在其他组件中使用，所以讲axios改写为vue的原型属性
+Vue.prototype.$http = axios // 组件进行数据请求时可以用this.$http.get().then()来实现
 
 Vue.config.productionTip = false
 
