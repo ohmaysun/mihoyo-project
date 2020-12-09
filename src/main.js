@@ -9,6 +9,7 @@ import store from './store/index'
 
 import axios from 'axios' // 引入axios
 import './mock/mock' // 引入mockjs
+import './libs/rem.js'
 
 Vue.use(ElementUI)
 
