@@ -1,8 +1,62 @@
 @import "@/assets/global.scss";
 
 .show-image {
-    .title {
-        color: $header-color;
-        font-size: $header-size;
+  .header {
+    color: $header-color;
+    font-size: $header-size;
+    width: 100%;
+    margin: 0 auto;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    position: fixed;
+    top: 0;
+    z-index: 99;
+    height: $header-height;
+    background: #ffffff;
+
+    .button-box {
+      padding: 0 18px;
+      height: 36px;
+      color: #ffffff;
+      background-color: #dcd9d9;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 600;
+      -webkit-transition: 0.2s background-color;
+      -o-transition: 0.2s background-color;
+      transition: 0.2s background-color;
+      display: -webkit-inline-box;
+      text-align: center;
+      line-height: 36px;
+
+      a {
+        color: #e6a23c;
+      }
     }
+  }
+  .container {
+    width: 1000px;
+    margin: 0 auto;
+    padding-left: 100px;
+    padding-right: 100px;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    margin-top: $header-height;
+
+    .img-box {
+      display: inline-block;
+      width: 280px;
+      margin: 0 20px 20px 0;
+      background-color: #fff;
+      border-radius: 4px;
+      overflow: hidden;
+      -webkit-box-shadow: 0 0 4px 0 rgba(0,0,0,0.05);
+      box-shadow: 0 0 4px 0 rgba(0,0,0,0.05);
+
+      img {
+        width: 240px;
+        height: 240px;
+      }
+    }
+  }
 }

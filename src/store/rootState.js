@@ -16,7 +16,9 @@ const state = {
       url: 'https://upload-bbs.mihoyo.com/upload/2020/11/28/83741927/dc77d9cd7932ff1d6cc5bb042cb942af_7914024931949708101.jpg?x-oss-process=image/resize,s_600/quality,q_80/auto-orient,0/interlace,1/format,jpg',
       weight: 0
     }
-  ]
+  ],
+  // 图片展示页面用到的，当前已经加载出的图片，保存到store
+  showImgsList: []
 }
 
 export default state

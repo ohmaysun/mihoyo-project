@@ -1,35 +1,35 @@
 @import "@/assets/global.scss";
 
 .images-management {
-    .title{
-        color: $header-color;
-        font-size: $header-size;
-    }
-    .container {
-        .row {
-            height: 300px;
-            display: float;
-            padding: 30px;
+  .title{
+    color: $header-color;
+    font-size: $header-size;
+  }
+  .container {
+    .row {
+      height: 300px;
+      display: float;
+      padding: 30px;
 
-            .img-box {
-                float: left;
-                width: 50%;
-                
-                img {
-                    height: 240px;
-                    width: 240px;
-                }
-            }
-            .btn-box {
-                height: 100%;
-
-                .btn {
-                    position: relative;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    padding: 24px;
-                }
-            }
+      .img-box {
+        float: left;
+        width: 50%;
+        
+        img {
+          height: 240px;
+          width: 240px;
         }
+      }
+      .btn-box {
+        height: 100%;
+
+        .btn {
+          position: relative;
+          top: 50%;
+          transform: translateY(-50%);
+          padding: 24px;
+        }
+      }
     }
+  }
 }
