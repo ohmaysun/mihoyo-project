@@ -1,10 +1,13 @@
 <template>
-  <div class="mask-bg" @click="closeMask">
-    {{currentImgId}}
-    <div class="item-box">
+  <div class='mask-bg' @click='closeMask'>
+    <!-- {{currentImgId}} -->
+    <div class='item-box'>
       <img :src='showImgUrl'>
     </div>
-    <div class="button-box">
+    <div class='button-box'>
+      <!--@click.stop 阻止事件冒泡-->
+      <div class='left' @click.stop='toLeft' v-show='currentImgIndex>0'></div>
+      <div class='right' @click.stop='toRight' v-show='currentImgIndex<listLen-1'></div>
     </div>
   </div>
 </template>
@@ -29,7 +32,7 @@ export default {
   },
   watch: {
     currentImgId (value) {
-      // console.log('监听到图片变化', value)
+      console.log('监听到图片变化', value)
       let that = this
       // 如果监听到图片id变化，且新变化的值不为空，则设置currentImgIndex
       if (value) {
@@ -41,18 +44,36 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['showImgsList'])
+    ...mapGetters(['showImgsList']),
+    listLen () {
+      return this.showImgsList.length
+    }
   },
   methods: {
     closeMask () {
+      console.log('closeMask')
       this.showImgUrl = ''
       this.currentImgIndex = -1
       this.$emit('closeMask')
+    },
+    // 点击向左，切换到上一张图片
+    toLeft () {
+      // console.log('toleft')
+      this.currentImgIndex--
+      // 得到要显示的图片的url
+      this.showImgUrl = this.showImgsList[this.currentImgIndex].img_url
+    },
+    // 点击向右按钮，切换到下一张图片
+    toRight () {
+      // console.log('toright')
+      this.currentImgIndex++
+      // 得到要显示的图片的url
+      this.showImgUrl = this.showImgsList[this.currentImgIndex].img_url
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-    @import "../../css/imageMaskSimple.scss";
+<style lang='scss' scoped>
+    @import '../../css/imageMaskSimple.scss';
 </style>

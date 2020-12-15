@@ -5,4 +5,55 @@
     color: $header-color;
     font-size: $header-size;
   }
+
+  .img-files {
+    width: 600px;
+    margin: 0 auto;
+  }
+  .img-box{
+    width: 244px;
+    height: 244px;
+    position: relative;
+    border:2px solid #e6e6e6;
+    margin: auto;
+    background: #f6f6f6;
+    img{
+      width: 240px;
+      height: 240px;
+      margin: auto;
+    }
+    span {
+      position: absolute;
+      top:5px;
+      right: 10px;
+      color: red;
+      display: none;
+    }
+    &:hover span{
+      display: block;
+    }
+  }
+  .img-file{
+    height: 240px;
+    width: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    text-align: center;
+    border: 2px #909399 dashed;
+    justify-content: center;
+    margin: auto;
+    position: relative;
+    > input {
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+    }
+    >label {
+      position: absolute;
+      font-size: 18px;
+      color: #333;
+    }
+  }
 }
