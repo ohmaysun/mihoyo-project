@@ -7,8 +7,8 @@
       </div>
     </div>
     <div class='container'>
-      <div v-for='item in showImgsList' :key='item.id' class='img-box'>
-        <img :src='item.url' @click='showBigImg(item)'>
+      <div v-for='item in showImgsList' :key='item.img_id' class='img-box'>
+        <img :src='item.img_url' @click='showBigImg(item)'>
       </div>
     </div>
     <ImageMaskSimple v-show="maskShow" @closeMask="closeMask" :currentImgId='currentImgId'/>
@@ -60,7 +60,7 @@ export default {
       // console.log(`展示大图 ${item.id}`)
       // console.log(item)
       this.maskShow = true
-      this.currentImgId = String(item.id)
+      this.currentImgId = String(item.img_id)
     },
     // 传递给ImageMaskSimple弹窗组件，用于关闭弹窗
     closeMask () {

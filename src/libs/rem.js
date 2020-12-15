@@ -1,5 +1,5 @@
 // 设置 rem 函数
-const baseSize = 32
+const baseSize = 16
 function setRem () {
   const scale = document.documentElement.clientWidth / 750
   document.documentElement.style.fontSize = (baseSize * Math.min(scale, 2)) + 'px'
