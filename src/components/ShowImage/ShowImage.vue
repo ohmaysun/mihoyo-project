@@ -43,9 +43,12 @@ export default {
     getDatas () {
       // console.log('ShowImage getDatas()')
       let that = this // 用that保存vue实例
-      this.$http.get('/getImages')
+      // 这里是服务器接口地址
+      // let url = 'http://127.0.0.1:8000/getImages'
+      let url = '/getImages'
+      this.$http.get(url)
         .then(res => {
-          // console.log(res)
+          console.log(res)
           that.showImgsList = res.data.data
           // console.log(that.showImgsList)
           that.SAVE_SHOWIMAGELIST(that.showImgsList)
