@@ -14,6 +14,7 @@ import './libs/rem.js'
 Vue.use(ElementUI)
 
 // axios不能在其他组件中使用，所以讲axios改写为vue的原型属性
+axios.defaults.baseURL = 'http://http://81.68.89.17:8000'
 Vue.prototype.$http = axios // 组件进行数据请求时可以用this.$http.get().then()来实现
 
 Vue.config.productionTip = false

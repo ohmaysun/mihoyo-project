@@ -37,7 +37,7 @@ export default {
       // 如果监听到图片id变化，且新变化的值不为空，则设置currentImgIndex
       if (value) {
         // 根据点击图片的id和已请求到的图片列表得到该图片的index
-        that.currentImgIndex = that.showImgsList.findIndex(item => item.img_id === that.currentImgId)
+        that.currentImgIndex = that.showImgsList.findIndex(item => item.img_id.toString() === that.currentImgId)
         // 得到要显示的图片的url
         that.showImgUrl = that.showImgsList[that.currentImgIndex].img_url
       }

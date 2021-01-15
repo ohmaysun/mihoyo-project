@@ -5,27 +5,36 @@
     </div>
     <div class='container'>
       <!-- 用两条假数据先调样式 -->
-        <el-row v-for='item in imagesStored' :key='item.id' :gutter='20' class='row'>
+        <el-row v-for='item in showImgsList' :key='item.img_id' :gutter='20' class='row'>
           <div class='img-box'>
-            <img :src='item.url' @click='showBigImg(item)'>
+            <img :src='item.img_url' @click='showBigImg(item)'>
           </div>
           <div class='btn-box'>
-            <el-button class='btn pass-btn' @click='pass(item.id)'>通过</el-button>
-            <el-button class='btn reject-btn' @click='reject(item.id)'>拒绝</el-button>
-            <el-button class='btn delete-btn' @click='del(item.id)'>删除</el-button>
-            <el-button class='btn reject-btn' @click='top(item.id)'>置顶</el-button>
+            <el-button class='btn pass-btn' @click='pass(item)'>通过</el-button>
+            <el-button class='btn reject-btn' @click='reject(item)'>拒绝</el-button>
+            <el-button class='btn delete-btn' @click='del(item)'>删除</el-button>
+            <el-button class='btn reject-btn' @click='top(item)'>置顶</el-button>
           </div>
         </el-row>
     </div>
+    <ImageMaskSimple v-show="maskShow" @closeMask="closeMask" :currentImgId='currentImgId'/>
   </div>
 </template>
 
 <script>
+import ImageMaskSimple from '@/components/ImageMask/ImageMaskSimple'
+import { mapMutations } from 'vuex'
 export default {
   name: 'ImagesManagement',
+  components: {
+    ImageMaskSimple
+  },
   data () {
     return {
-      title: '图片管理'
+      title: '图片管理',
+      showImgsList: [], // 展示的图片列表
+      maskShow: false, // 是否展示弹窗
+      currentImgId: '' // 当前点击的商品id
     }
   },
   computed: {
@@ -35,28 +44,76 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['SAVE_SHOWIMAGELIST']),
     // 展示大图
     showBigImg (item) {
-      console.log(`展示大图 ${item.id}`)
+      console.log(`展示大图 ${item.img_id}`)
+      this.maskShow = true
+      this.currentImgId = String(item.img_id)
+    },
+    // 传递给ImageMaskSimple弹窗组件，用于关闭弹窗
+    closeMask () {
+      this.maskShow = false
+      this.currentImgId = ''
     },
     // 通过
-    pass (id) {
-      console.log(`pass ${id}`)
+    pass (item) {
+      console.log(`pass ${item.img_id}`)
     },
     // 拒绝
-    reject (id) {
-      console.log(`reject ${id}`)
+    reject (item) {
+      console.log(`reject ${item.img_id}`)
     },
     // 删除
-    del (id) {
-      console.log(`delete ${id}`)
+    del (item) {
+      console.log(`delete ${item.img_id}`)
+      // let url = 'http://81.68.89.17:8000/delImageById'
+      // let config = {
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   }
+      // }
+      // this.$http.post(url, {img_id: item.img_id}, config).then(res => {
+      //   console.log(res)
+      // }).catch(err => {
+      //   console.log(err)
+      // })
     },
     // 置顶
-    top (id) {
-      console.log(`top ${id}`)
+    top (item) {
+      console.log(`top ${item.img_id}`)
     },
     created () {
+    },
+    // 获取要展示的图片。现在是通过mockjs来获取假数据
+    getDatas () {
+      // console.log('ShowImage getDatas()')
+      let that = this // 用that保存vue实例
+      // 这里是服务器接口地址
+      // let url = 'http://127.0.0.1:8000/getImages' // 本地开启node app.js
+      // let url = '/getImages' // 本地使用mock.js 要开启mock配置
+      let url = 'http://81.68.89.17:8000/getImages'
+      this.$http.get(url)
+        .then(res => {
+          console.log(res)
+          let list = res.data.data.files
+          let baseUrl = res.data.data.baseurl || ''
+          list.forEach((item) => {
+            item.img_url = baseUrl + item.img_url
+          })
+          console.log(list)
+          that.showImgsList = list
+          // console.log(that.showImgsList)
+          that.SAVE_SHOWIMAGELIST(that.showImgsList)
+          // console.log(that.showImgsList)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
+  },
+  mounted () {
+    this.getDatas()
   }
 }
 </script>

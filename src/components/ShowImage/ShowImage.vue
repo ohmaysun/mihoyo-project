@@ -44,12 +44,19 @@ export default {
       // console.log('ShowImage getDatas()')
       let that = this // 用that保存vue实例
       // 这里是服务器接口地址
-      // let url = 'http://127.0.0.1:8000/getImages'
-      let url = '/getImages'
+      // let url = 'http://127.0.0.1:8000/getImages' // 本地开启node app.js
+      // let url = '/getImages' // 本地使用mock.js 要开启mock配置
+      let url = 'http://81.68.89.17:8000/getImages'
       this.$http.get(url)
         .then(res => {
           console.log(res)
-          that.showImgsList = res.data.data
+          let list = res.data.data.files
+          let baseUrl = res.data.data.baseurl || ''
+          list.forEach((item) => {
+            item.img_url = baseUrl + item.img_url
+          })
+          console.log(list)
+          that.showImgsList = list
           // console.log(that.showImgsList)
           that.SAVE_SHOWIMAGELIST(that.showImgsList)
           // console.log(that.showImgsList)

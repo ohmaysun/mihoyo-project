@@ -84,7 +84,8 @@ export default {
         }
       }
       // 这里是服务器接口地址
-      let url = 'http://127.0.0.1:8000/uploadImages'
+      // let url = 'http://127.0.0.1:8000/uploadImages'
+      let url = 'http://81.68.89.17:8000/uploadImages'
       this.$http.post(url, formData, config)
         .then(response => {
           console.log(response)
