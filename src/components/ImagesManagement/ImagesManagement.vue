@@ -56,36 +56,73 @@ export default {
       this.maskShow = false
       this.currentImgId = ''
     },
-    // 通过
+    // 通过 status:0不可展示。status:1可展示。 要把status改为1
     pass (item) {
       console.log(`pass ${item.img_id}`)
+      let that = this
+      let url = 'http://81.68.89.17:8000/passImageById'
+      let config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+      this.$http.post(url, {img_id: item.img_id}, config).then(res => {
+        console.log(res)
+        if (res && res.data && res.data.data && res.data.code === 200) {
+          // 若操作成功，重新请求数据
+          that.getDatas()
+        }
+      }).catch(err => {
+        console.log(err)
+      })
     },
-    // 拒绝
+    // 拒绝 status:0不可展示。status:1可展示。 要把status改为0
     reject (item) {
       console.log(`reject ${item.img_id}`)
+      let that = this
+      let url = 'http://81.68.89.17:8000/rejectImageById'
+      let config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+      this.$http.post(url, {img_id: item.img_id}, config).then(res => {
+        console.log(res)
+        if (res && res.data && res.data.data && res.data.code === 200) {
+          // 若操作成功，重新请求数据
+          that.getDatas()
+        }
+      }).catch(err => {
+        console.log(err)
+      })
     },
     // 删除
     del (item) {
       console.log(`delete ${item.img_id}`)
-      // let url = 'http://81.68.89.17:8000/delImageById'
-      // let config = {
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   }
-      // }
-      // this.$http.post(url, {img_id: item.img_id}, config).then(res => {
-      //   console.log(res)
-      // }).catch(err => {
-      //   console.log(err)
-      // })
+      let that = this
+      let url = 'http://81.68.89.17:8000/delImageById'
+      let config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+      this.$http.post(url, {img_id: item.img_id}, config).then(res => {
+        console.log(res)
+        if (res && res.data && res.data.data && res.data.code === 200) {
+          // 若删除成功，重新请求数据
+          that.getDatas()
+        }
+      }).catch(err => {
+        console.log(err)
+      })
     },
-    // 置顶
+    // 置顶 undone
     top (item) {
       console.log(`top ${item.img_id}`)
     },
     created () {
     },
-    // 获取要展示的图片。现在是通过mockjs来获取假数据
+    // 获取所有图片
     getDatas () {
       // console.log('ShowImage getDatas()')
       let that = this // 用that保存vue实例
@@ -95,17 +132,22 @@ export default {
       let url = 'http://81.68.89.17:8000/getImages'
       this.$http.get(url)
         .then(res => {
-          console.log(res)
-          let list = res.data.data.files
-          let baseUrl = res.data.data.baseurl || ''
-          list.forEach((item) => {
-            item.img_url = baseUrl + item.img_url
-          })
-          console.log(list)
-          that.showImgsList = list
-          // console.log(that.showImgsList)
-          that.SAVE_SHOWIMAGELIST(that.showImgsList)
-          // console.log(that.showImgsList)
+          // console.log(res)
+          // 对res的返回添加判断
+          if (res && res.data && res.data.data && res.data.code === 200) {
+            if (res.data.data.files) {
+              let list = res.data.data.files
+              let baseUrl = res.data.data.baseurl || ''
+              list.forEach((item) => {
+                item.img_url = baseUrl + item.img_url
+              })
+              console.log(list)
+              that.showImgsList = list
+              // console.log(that.showImgsList)
+              that.SAVE_SHOWIMAGELIST(that.showImgsList)
+              // console.log(that.showImgsList)
+            }
+          }
         })
         .catch(err => {
           console.log(err)
@@ -113,6 +155,8 @@ export default {
     }
   },
   mounted () {
+    // 假数据调试。
+    // this.showImgsList = this.imagesStored
     this.getDatas()
   }
 }
