@@ -7,17 +7,17 @@
   }
   .container {
     .row {
-      height: 300px;
+      height: 160px;
       display: float;
       padding: 20px;
 
       .img-box {
         float: left;
-        width: 30%;
+        width: 50%;
         
         img {
-          height: 240px;
-          width: 240px;
+          height: 120px;
+          width: 120px;
         }
       }
       .btn-box {
@@ -30,6 +30,11 @@
           padding: 24px;
         }
       }
+    }
+
+    /*拖曳选中样式*/
+    .chosen {
+      border: solid 1px #3089dc !important;
     }
   }
 }

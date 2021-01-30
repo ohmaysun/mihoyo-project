@@ -11,11 +11,14 @@ import axios from 'axios' // 引入axios
 import './mock/mock' // 引入mockjs
 import './libs/rem.js'
 
+import _ from 'lodash' // 引入lodash
+
 Vue.use(ElementUI)
 
 // axios不能在其他组件中使用，所以讲axios改写为vue的原型属性
-axios.defaults.baseURL = 'http://http://81.68.89.17:8000'
+axios.defaults.baseURL = 'http://81.68.89.17:8000'
 Vue.prototype.$http = axios // 组件进行数据请求时可以用this.$http.get().then()来实现
+Vue.prototype._ = _
 
 Vue.config.productionTip = false
 
