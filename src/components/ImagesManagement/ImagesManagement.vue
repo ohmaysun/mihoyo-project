@@ -31,18 +31,23 @@
       </el-pagination>
     </div>
     <ImageMaskSimple v-show="maskShow" @closeMask="closeMask" :currentImgId='currentImgId'/>
+    <transition name='fade'>
+      <Loading v-if='isLoading'></Loading>
+    </transition>
   </div>
 </template>
 
 <script>
 import ImageMaskSimple from '@/components/ImageMask/ImageMaskSimple'
+import Loading from '@/components/Loading/Loading'
 import { mapMutations } from 'vuex'
 import draggable from 'vuedraggable'
 export default {
   name: 'ImagesManagement',
   components: {
     ImageMaskSimple,
-    draggable
+    draggable,
+    Loading
   },
   data () {
     return {
@@ -52,7 +57,8 @@ export default {
       currentImgId: '', // 当前点击的商品id
       currentPage: 1, // 初始页
       pagesize: 10, // 每页的数据
-      imagesShow: [] // 当前页要展示的图片列表
+      imagesShow: [], // 当前页要展示的图片列表
+      isLoading: true
     }
   },
   computed: {
@@ -154,7 +160,7 @@ export default {
     top (item) {
       console.log(`top ${item.img_id}`)
     },
-    // 获取所有图片
+    // 获取所有图片 现在是一次请求返回所有数据， 后续可改为分页请求数据
     getDatas () {
       // console.log('ShowImage getDatas()')
       let that = this // 用that保存vue实例
@@ -183,6 +189,9 @@ export default {
               // console.log(that.showImgsList)
             }
           }
+        })
+        .then(res => {
+          that.isLoading = false
         })
         .catch(err => {
           console.log(err)
