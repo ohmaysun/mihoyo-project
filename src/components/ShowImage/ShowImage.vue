@@ -21,6 +21,7 @@
 <script>
 import ImageMaskSimple from '@/components/ImageMask/ImageMaskSimple'
 import Loading from '@/components/Loading/Loading'
+import { ExpriesCache, generateKey } from '@/utils/DataCache'
 import { mapMutations } from 'vuex'
 export default {
   name: 'ShowImage',
@@ -90,6 +91,58 @@ export default {
           console.log(err)
         })
     },
+    // 入参：pagesize，currentpage。输出所对应的list
+    // getData方法升级，考虑数据五分钟缓存，读数据
+    getDatasUsingCache () {
+      // 生成key, 当前按页请求的数据的右索引
+      const key = generateKey('getImages', this.showImgsList.length)
+      // 获得数据
+      let data = ExpriesCache.get(key, this.pagesize, this.currentpage, this.showImgsList.length)
+      // 如果从缓存中获取不到
+      if (!data) {
+        console.log('从请求接口拿的数据')
+        let that = this // 用that保存vue实例
+        let url = `http://81.68.89.17:8000/getShowImages?pagesize=${this.pagesize}&pagenum=${this.currentpage}`
+        this.$http.get(url).then(res => {
+          // console.log(res)
+          let list = res.data.data.files
+          let baseUrl = res.data.data.baseurl || ''
+          list.forEach((item) => {
+            item.img_url = baseUrl + item.img_url
+          })
+          // console.log(list)
+          if (list.length) {
+            // 请求到数据，下一次请求的currentpage++
+            that.currentpage++
+            // 将当前请求到的数据，与已有的数据拼接起来
+            that.showImgsList = this._.concat(that.showImgsList, list)
+            // 使用 300s 缓存，300s之后再次get就会 获取null 而从服务端继续请求
+            ExpriesCache.set(key, that.showImgsList, 300)
+            // console.log(that.showImgsList)
+            that.SAVE_SHOWIMAGELIST(that.showImgsList)
+            // console.log(that.showImgsList)
+          } else {
+            // 如果不再请求导数据，则设置没有更多为true
+            that.isNoMoreBool = true
+          }
+        }).then(res => {
+          // 请求完数据，loading结束
+          that.isLoading = false
+          // 请求完数据，下一次可以触发loadmore
+          that.loadMoreBool = true
+        }).catch(err => {
+          console.log(err)
+        })
+      } else {
+        console.log('从cache里拿的数据')
+        // 将从缓存中拿到的数据，设置为要展示的数据
+        this.showImgsList = data
+        // 请求完数据，loading结束
+        this.isLoading = false
+        // console.log(that.showImgsList)
+        this.SAVE_SHOWIMAGELIST(this.showImgsList)
+      }
+    },
     // 展示大图
     showBigImg (item) {
       // console.log(`展示大图 ${item.id}`)
@@ -137,12 +190,14 @@ export default {
       ) {
         // false防止getDatas()加载数据函数多次触发
         this.loadMoreBool = false
-        this.getDatas()
+        // this.getDatas()
+        this.getDatasUsingCache()
       }
     }
   },
   created () {
-    this.getDatas()
+    // this.getDatas()
+    this.getDatasUsingCache()
   },
   mounted () {
     // this.getDatas()
