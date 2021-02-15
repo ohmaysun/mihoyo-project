@@ -11,25 +11,46 @@
         </div>
       </div>
       <div class='img-file' v-if='imgs.length < size'>
-        <input type='file' id='files' accept="image/png,image/gif,image/jpeg" @change='fileChange' ref='file'/>
+        <input type='file' id='files' accept='image/png,image/gif,image/jpeg' @change='fileChange' ref='file'/>
         <label for='files'>上传图片</label>
       </div>
     </div>
     <div class='button-box'>
       <el-button class='upload-btn' @click='upload' v-show='imgs.length>0'>上传</el-button>
     </div>
+    <el-dialog class='dialog' title='提示' :visible.sync='dialogVisible' :before-close='handleClose'>
+      <span>{{tip}}</span>
+      <span slot='footer' class='dialog-footer'>
+        <div class='button-box'>
+          <div class='btn' @click='dialogVisible = false'>继续上传</div>
+        </div>
+        <div class='button-box'>
+          <router-link class='btn' to='/showImage'>返回列表页</router-link>
+        </div>
+      </span>
+    </el-dialog>
+    <transition name='fade'>
+      <Loading v-if='isLoading'></Loading>
+    </transition>
   </div>
 </template>
 
 <script>
+import Loading from '@/components/Loading/Loading'
 export default {
   name: 'UploadImage',
+  components: {
+    Loading
+  },
   data () {
     return {
       title: '上传图片',
       imgs: [], // 图片预览地址
       imgfiles: [], // 图片原文件，上传到后台的数据
-      size: 5 // 限制上传数量
+      size: 5, // 限制上传数量
+      isLoading: false, // 是否显示loading
+      dialogVisible: false, // 是否显示dialog，用来控制弹框的显示隐藏
+      tip: '' // 操作信息
     }
   },
   methods: {
@@ -56,6 +77,8 @@ export default {
       // console.log(this.imgfiles)
     },
     upload () { // 上传
+      // 上传前显示loading动画
+      this.isLoading = true
       // todo
       // console.log(this.imgs)
       // console.log(this.imgfiles)
@@ -90,16 +113,44 @@ export default {
         .then(response => {
           console.log(response)
           if (response.data.code === 200) {
+            that.tip = '保存成功'
             console.log('上传成功')
             // todo 保存成功后，提示用户是否继续上传，还是返回列表页
             that.imgs = []
             that.imgfiles = []
           } else {
+            that.tip = '保存失败'
             console.log('上传失败')
             that.imgs = []
             that.imgfiles = []
           }
         })
+        .then(res => {
+          // 上传完取消loading动画
+          that.isLoading = false
+          // 显示dialog
+          that.dialogVisible = true
+        })
+    },
+    // 点击弹窗的继续上传按钮
+    continueBtn () {
+      // 弹窗提示字样清空
+      this.tip = ''
+      // 关闭弹窗
+      this.dialogVisible = false
+      // 清空要上传的图片
+      this.imgs = []
+      this.imgfiles = []
+    },
+    // 弹窗关闭
+    handleClose (done) {
+      this.$confirm('确定关闭吗').then(() => {
+        // function(done)，done 用于关闭 Dialog
+        done()
+        console.info('点击右上角 X ，取消按钮或遮罩层时触发')
+      }).catch(() => {
+        console.log('点击确定时触发')
+      })
     }
   }
 }
