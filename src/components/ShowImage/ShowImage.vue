@@ -5,13 +5,16 @@
       <div class='button-box'>
         <router-link to='/uploadImage'>去上传图片</router-link>
       </div>
+      <div class='button-box'>
+        <label>tips:该页面设置了缓存机制。若经过图片管理操作，请自行先刷新页面。</label>
+      </div>
     </div>
     <div class='container' id='showContainer'>
       <div v-for='item in showImgsList' :key='item.img_id' class='img-box'>
         <img :src='item.img_url' @click='showBigImg(item)'>
       </div>
     </div>
-    <ImageMaskSimple v-show="maskShow" @closeMask="closeMask" :currentImgId='currentImgId'/>
+    <ImageMaskSimple v-show="maskShow" @closeMask="closeMask" :currentImgId='currentImgId' :isShowManage='false'/>
     <transition name='fade'>
       <Loading v-if='isLoading'></Loading>
     </transition>

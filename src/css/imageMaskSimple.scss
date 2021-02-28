@@ -42,4 +42,15 @@
       border-left: 50px solid #42b983;
     }
   }
+
+  .manage-box {
+    position: absolute;
+    left: 50%;
+    height: 50%;
+    transform: translate(-50%,-50%);
+    opacity: 80%;
+    .btn {
+      color: #000;
+    }
+  }
 }
